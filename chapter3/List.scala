@@ -26,7 +26,7 @@ object List {
     def setHead[A](xs: List[A], h: A): List[A] = {
         tail(xs) match  {
             case Nil => Nil
-            case t => Cons(h, t)
+            case Cons(_, t) => Cons(h, t)
         }
     }
     
@@ -50,6 +50,13 @@ object List {
         }
         loop(xs)
     }
+
+    def init[A](xs: List[A]): List[A] = {
+        xs match {
+            case Cons(h, Nil) => Nil
+            case Cons(h, t) => Cons(h, init(t))
+        }
+    }
 }
 
 val l = List(1, 2, 3, 4, 5, 6)
@@ -65,3 +72,4 @@ def even(i: Int): Boolean = i % 2 == 0
 val l2 = List(2, 4, 6, 8, 9, 4, 7, 13, 15, 20)
 println(List.dropWhile(l2, even))
 
+println(List.init(l2))
