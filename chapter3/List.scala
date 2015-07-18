@@ -9,6 +9,12 @@ object List {
     if (as.isEmpty) Nil
         else Cons(as.head, apply(as.tail: _*))
 
+    def foldRight[A, B](as: List[A], z: B)(f: (A, B) => B): B =
+        as match {
+            case Nil => z
+            case Cons(x, xs) => f(x, foldRight(xs, z)(f))
+        }
+
     def tail[A](xs: List[A]): List[A] = {
         xs match {
             case Nil => Nil
@@ -57,6 +63,11 @@ object List {
             case Cons(h, t) => Cons(h, init(t))
         }
     }
+
+    //Length of a list using foldRight
+    def lengthFR[A](xs: List[A]): Int = 
+        foldRight(xs, 0)((_, acc) => acc + 1)
+    
 }
 
 val l = List(1, 2, 3, 4, 5, 6)
@@ -73,3 +84,5 @@ val l2 = List(2, 4, 6, 8, 9, 4, 7, 13, 15, 20)
 println(List.dropWhile(l2, even))
 
 println(List.init(l2))
+
+println(List.lengthFR(l2))
