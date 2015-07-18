@@ -76,6 +76,15 @@ object List {
             case Cons(x, xs) => foldLeft(xs, f(z, x))(f)
         }
     }
+
+    def sumFL[A](xs: List[Int]): Int = 
+        foldLeft(xs, 0)(_ + _)
+
+    def productFL[A](xs: List[Int]): Int = 
+        foldLeft(xs, 1)(_ * _)
+
+    def lengthFL[A](xs: List[A]): Int =
+        foldLeft(xs, 0)((acc, _) => acc + 1)
 }
 
 val l = List(1, 2, 3, 4, 5, 6)
@@ -88,11 +97,19 @@ println(List.head(List.tail(l)))
 def even(i: Int): Boolean = i % 2 == 0
 
 
+println("dropWhile")
 val l2 = List(2, 4, 6, 8, 9, 4, 7, 13, 15, 20)
 println(List.dropWhile(l2, even))
 
+println("init")
 println(List.init(l2))
 
+println("Fold right")
 println(List.lengthFR(l2))
 
+println("Fold left")
 println(List.foldLeft(l, 0)(_ + _))
+println(List.sumFL(l))
+println(List.productFL(l))
+println(List.lengthFL(l))
+
