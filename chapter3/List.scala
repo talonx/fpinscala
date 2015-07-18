@@ -1,3 +1,5 @@
+import java.util.NoSuchElementException
+
 sealed trait List[+A]
 case object Nil extends List[Nothing]
 case class Cons[+A](head: A, tail: List[A]) extends List[A]
@@ -14,6 +16,13 @@ object List {
         }
     }
 
+    def head[A](xs: List[A]): A = {
+        xs match {
+            case Nil => throw new NoSuchElementException("head of empty list")
+            case Cons(y: A, ys: List[A]) => y
+        }
+    }
+    
     def setHead[A](xs: List[A], h: A): List[A] = {
         tail(xs) match  {
             case Nil => Nil
@@ -31,8 +40,28 @@ object List {
 
         loop(0, xs)
     }
+
+    def dropWhile[A](xs: List[A], p: A => Boolean): List[A] = {
+        def loop(xs: List[A]): List[A] = {
+            p(head(xs)) match {
+                case true => loop(tail(xs))
+                case false => xs
+            }
+        }
+        loop(xs)
+    }
 }
 
 val l = List(1, 2, 3, 4, 5, 6)
 println(List.drop(l, 2))
 println(List.drop(l, 4))
+
+println(List.head(l))
+println(List.head(List.tail(l)))
+
+def even(i: Int): Boolean = i % 2 == 0
+
+
+val l2 = List(2, 4, 6, 8, 9, 4, 7, 13, 15, 20)
+println(List.dropWhile(l2, even))
+
