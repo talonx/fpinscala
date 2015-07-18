@@ -59,6 +59,7 @@ object List {
 
     def init[A](xs: List[A]): List[A] = {
         xs match {
+            case Nil => Nil
             case Cons(h, Nil) => Nil
             case Cons(h, t) => Cons(h, init(t))
         }
@@ -68,6 +69,13 @@ object List {
     def lengthFR[A](xs: List[A]): Int = 
         foldRight(xs, 0)((_, acc) => acc + 1)
     
+    @annotation.tailrec
+    def foldLeft[A, B](xs: List[A], z: B)(f: (B, A) => B): B = {
+        xs match {
+            case Nil => z
+            case Cons(x, xs) => foldLeft(xs, f(z, x))(f)
+        }
+    }
 }
 
 val l = List(1, 2, 3, 4, 5, 6)
@@ -86,3 +94,5 @@ println(List.dropWhile(l2, even))
 println(List.init(l2))
 
 println(List.lengthFR(l2))
+
+println(List.foldLeft(l, 0)(_ + _))
