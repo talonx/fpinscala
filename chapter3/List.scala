@@ -95,6 +95,34 @@ object List {
 
     def appendFL[A](xs: List[A], ys: List[A]): List[A] =
         foldRight(xs, ys)((e, acc) => Cons(e, acc))
+
+    //Ex 3.16 without folding
+    def transform(xs: List[Int]): List[Int] = 
+        xs match {
+            case Nil => Nil
+            case Cons(y, ys) => Cons(y + 1, transform(ys))
+        }
+
+    //Ex 3.17 without folding
+    def dToString(xs: List[Double]): List[String] =
+        xs match {
+            case Nil => Nil
+            case Cons(y, ys) => Cons(y.toString, dToString(ys))
+        }
+
+    //Ex 3.18 map with foldRight
+    def map[A, B](xs: List[A])(f: A => B): List[B] =
+        foldRight(xs, List[B]())((e, acc) => Cons(f(e), acc))
+
+    //Ex 3.19
+    def filter[A](xs: List[A])(f: A => Boolean): List[A] =
+        foldRight(xs, List[A]())((e, acc) => f(e) match { 
+            case true => Cons(e, acc)
+            case false => acc
+        }
+    )
+
+    
 }
 
 val l = List(1, 2, 3, 4, 5, 6)
@@ -133,3 +161,11 @@ println("append")
 val la = List(1, 3, 5)
 val lb = List(2, 4, 6)
 println(List.appendFL(la, lb))
+
+println("transform")
+val tl = List(1, 3, 10, 2, 1)
+println(List.transform(tl))
+
+println("Filter odd")
+val tall = List(1, 2, 3, 4, 5, 6, 7, 8)
+println(List.filter(tall)(_ % 2 == 0))
