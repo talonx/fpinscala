@@ -85,6 +85,16 @@ object List {
 
     def lengthFL[A](xs: List[A]): Int =
         foldLeft(xs, 0)((acc, _) => acc + 1)
+
+    def reverseFL[A](xs: List[A]): List[A] =
+        //Type decl for accummulator is required here
+        foldLeft(xs, List[A]())((acc, e) => Cons(e, acc))
+
+    def foldLeftFR[A, B](xs: List[A], z: B)(f: (B, A) => B): B =
+        foldRight(reverseFL(xs), z)((x, y) => f(y, x))
+
+    def appendFL[A](xs: List[A], ys: List[A]): List[A] =
+        foldRight(xs, ys)((e, acc) => Cons(e, acc))
 }
 
 val l = List(1, 2, 3, 4, 5, 6)
@@ -113,3 +123,13 @@ println(List.sumFL(l))
 println(List.productFL(l))
 println(List.lengthFL(l))
 
+println("reverse FL")
+println(List.reverseFL(l))
+
+println("FL/FR in terms of each other")
+println(List.foldLeftFR(l, 0)(_ + _))
+
+println("append")
+val la = List(1, 3, 5)
+val lb = List(2, 4, 6)
+println(List.appendFL(la, lb))
